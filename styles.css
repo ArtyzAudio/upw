@@ -1119,6 +1119,34 @@ body {
   border-color: var(--accent);
 }
 
+.auth-pass-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-pass-wrap .auth-input {
+  padding-right: 64px;
+}
+
+.auth-toggle-pass {
+  position: absolute;
+  right: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink-muted);
+  border-radius: 6px;
+  padding: 4px 9px;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-toggle-pass:hover {
+  color: var(--ink);
+  background: var(--surface-alt);
+}
+
 .auth-error {
   padding: 9px 12px;
   border-radius: 7px;

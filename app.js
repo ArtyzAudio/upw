@@ -22,11 +22,19 @@
 
   async function decryptVault(username, password) {
     const vault = window.ENCRYPTED_VAULT;
-    if (!vault || !window.crypto || !window.crypto.subtle) {
-      throw new Error("Web Crypto API unavailable in this browser context.");
+    if (!vault) {
+      const e = new Error("Encrypted vault failed to load. Hard-refresh the page.");
+      e.isSystem = true;
+      throw e;
+    }
+    if (!window.crypto || !window.crypto.subtle) {
+      const e = new Error("Browser Web Crypto API requires HTTPS (open via the https://artyzaudio.github.io/upw/ link).");
+      e.isSystem = true;
+      throw e;
     }
     const enc = new TextEncoder();
-    const secretBytes = enc.encode(`${username.trim()}:${password}`);
+    const normalizedUser = username.trim().toLowerCase();
+    const secretBytes = enc.encode(`${normalizedUser}:${password}`);
     const baseKey = await window.crypto.subtle.importKey(
       "raw",
       secretBytes,
@@ -1059,6 +1067,16 @@
   const authPass = document.getElementById("authPass");
   const authError = document.getElementById("authError");
   const authSubmitBtn = document.getElementById("authSubmitBtn");
+  const togglePassBtn = document.getElementById("togglePassBtn");
+
+  if (togglePassBtn) {
+    togglePassBtn.addEventListener("click", () => {
+      const showing = authPass.type === "text";
+      authPass.type = showing ? "password" : "text";
+      togglePassBtn.textContent = showing ? "Show" : "Hide";
+      togglePassBtn.setAttribute("aria-label", showing ? "Show password" : "Hide password");
+    });
+  }
 
   // Restore active tab session if already unlocked in this tab
   const cachedJson = sessionStorage.getItem(SESSION_KEY);
@@ -1077,14 +1095,23 @@
     authSubmitBtn.disabled = true;
     authSubmitBtn.textContent = "Decrypting...";
     try {
-      const data = await decryptVault(authUser.value, authPass.value);
+      let data;
+      try {
+        data = await decryptVault(authUser.value, authPass.value);
+      } catch (firstErr) {
+        if (!firstErr.isSystem && authPass.value !== authPass.value.trim()) {
+          data = await decryptVault(authUser.value, authPass.value.trim());
+        } else {
+          throw firstErr;
+        }
+      }
       sessionStorage.setItem(SESSION_KEY, JSON.stringify(data));
       initPlaybookApp(data);
-    } catch (_) {
-      authError.textContent = "Invalid login or password.";
+    } catch (err) {
+      authError.textContent = err && err.isSystem ? err.message : "Invalid login or password.";
       authError.hidden = false;
-      authPass.value = "";
       authPass.focus();
+      authPass.select();
     } finally {
       authSubmitBtn.disabled = false;
       authSubmitBtn.textContent = "Unlock Dossier";

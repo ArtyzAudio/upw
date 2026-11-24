@@ -26,6 +26,9 @@
             name="username"
             class="auth-input"
             autocomplete="username"
+            autocapitalize="none"
+            autocorrect="off"
+            spellcheck="false"
             required
             autofocus
           />
@@ -33,14 +36,20 @@
 
         <label class="auth-label" for="authPass">
           <span>Password</span>
-          <input
-            type="password"
-            id="authPass"
-            name="password"
-            class="auth-input"
-            autocomplete="current-password"
-            required
-          />
+          <div class="auth-pass-wrap">
+            <input
+              type="password"
+              id="authPass"
+              name="password"
+              class="auth-input"
+              autocomplete="current-password"
+              autocapitalize="none"
+              autocorrect="off"
+              spellcheck="false"
+              required
+            />
+            <button type="button" class="auth-toggle-pass" id="togglePassBtn" aria-label="Show password">Show</button>
+          </div>
         </label>
 
         <div class="auth-error" id="authError" role="alert" hidden></div>
