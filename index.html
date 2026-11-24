@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Private Access Portal</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="auth-screen" id="authGate">
+    <section class="auth-card" aria-labelledby="authTitle">
+      <p class="eyebrow">ENCRYPTED PORTAL</p>
+      <h1 class="auth-title" id="authTitle">Sign In</h1>
+      <p class="auth-subtitle">Enter valid credentials to decrypt and open the dossier in browser memory.</p>
+
+      <form id="authForm" class="auth-form" autocomplete="on">
+        <label class="auth-label" for="authUser">
+          <span>Login</span>
+          <input
+            type="text"
+            id="authUser"
+            name="username"
+            class="auth-input"
+            autocomplete="username"
+            required
+            autofocus
+          />
+        </label>
+
+        <label class="auth-label" for="authPass">
+          <span>Password</span>
+          <input
+            type="password"
+            id="authPass"
+            name="password"
+            class="auth-input"
+            autocomplete="current-password"
+            required
+          />
+        </label>
+
+        <div class="auth-error" id="authError" role="alert" hidden></div>
+
+        <button type="submit" class="btn-primary auth-submit" id="authSubmitBtn">
+          Unlock Dossier
+        </button>
+      </form>
+    </section>
+  </main>
+
+  <div id="appRoot" hidden></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="vault.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
